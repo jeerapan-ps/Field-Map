@@ -201,6 +201,42 @@
       background:var(--field); transform:rotate(-45deg);
       border:2px solid #fff; box-shadow:0 2px 6px rgba(16,24,39,0.4);
     }
+.photo-actions{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+  width:100%;
+}
+
+.photo-btn{
+  flex:1;
+  border:none;
+  border-radius:8px;
+  padding:10px 12px;
+  cursor:pointer;
+
+  font-family:var(--sans);
+  font-size:13px;
+  font-weight:600;
+
+  background:#EEF1F4;
+  color:var(--ink);
+
+  transition:all .15s ease;
+}
+
+.photo-btn:active{
+  transform:scale(.97);
+}
+
+.photo-btn.primary{
+  background:var(--field);
+  color:white;
+}
+
+.photo-btn.primary:hover{
+  background:var(--field-dark);
+}
   </style>
 </head>
 <body>
@@ -235,7 +271,7 @@
     <h2>เพิ่มจุดข้อมูลใหม่</h2>
     <p class="sub">เลือกรูปจากกล้องหรืออัลบั้ม ระบบจะดึงพิกัด GPS จากไฟล์ภาพให้อัตโนมัติ (ถ้ามี) และย่อขนาดก่อนอัปโหลด</p>
 
-    <label class="photo-drop" id="photoDrop">
+    <!-- <label class="photo-drop" id="photoDrop">
       <img id="photoPreview" style="display:none">
       <svg id="photoIcon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
@@ -243,7 +279,33 @@
       </svg>
       <div class="hint" id="photoHint"><b>แตะเพื่อเลือกรูปภาพ</b><br>ถ่ายด้วยกล้อง หรือเลือกจากอัลบั้ม</div>
       <input type="file" id="photoInput" accept="image/*" capture="environment"> 
-    </label>
+    </label> -->
+    <div class="photo-drop" id="photoDrop">
+      <img id="photoPreview" style="display:none">
+      <svg id="photoIcon" width="30" height="30" viewBox="0 0 24 24"
+           fill="none" stroke="#6B7280" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+        <circle cx="12" cy="13" r="4"></circle>
+      </svg>
+      <div class="hint" id="photoHint">
+        <b>เพิ่มรูปภาพ</b><br>
+        ถ่ายภาพใหม่ หรือเลือกจากอัลบั้ม
+      </div>
+      <div class="photo-actions">
+        <button type="button" class="photo-btn primary" id="cameraBtn">📷 ถ่ายรูป</button>
+        <button type="button" class="photo-btn" id="galleryBtn">🖼 อัลบั้ม</button>
+      </div>
+      <input type="file"
+             id="cameraInput"
+             accept="image/*"
+             capture="environment"
+             hidden>
+      <input type="file"
+             id="galleryInput"
+             accept="image/*"
+             hidden>
+    </div>
 
     <div class="gps-readout empty" id="gpsReadout">
       <span class="lbl">พิกัดจากภาพ (EXIF GPS)</span>
@@ -421,9 +483,24 @@
     return dd;
   }
 
-  //photoDrop.addEventListener('click', (e)=>{ if(e.target !== photoInput) photoInput.click(); });
+  //photoInput.addEventListener('change', function(){
+const cameraBtn = document.getElementById('cameraBtn');
+const galleryBtn = document.getElementById('galleryBtn');
 
-  photoInput.addEventListener('change', function(){
+const cameraInput = document.getElementById('cameraInput');
+const galleryInput = document.getElementById('galleryInput');
+
+cameraBtn.addEventListener('click', () => {
+  cameraInput.click();
+});
+
+galleryBtn.addEventListener('click', () => {
+  galleryInput.click();
+});
+
+cameraInput.addEventListener('change', handlePhotoSelect);
+galleryInput.addEventListener('change', handlePhotoSelect);
+  function handlePhotoSelect(e){
     const file = photoInput.files[0];
     if(!file) return;
     currentFileName = file.name || 'photo.jpg';
