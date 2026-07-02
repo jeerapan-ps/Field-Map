@@ -550,7 +550,7 @@ galleryInput.addEventListener('change', handlePhotoSelect);
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
-  });
+  };
 
   latInput.addEventListener('input', ()=>{ currentLat = parseFloat(latInput.value); gpsVal.textContent = 'แก้ไขด้วยตนเอง'; gpsReadout.classList.remove('empty'); validateForm(); });
   lngInput.addEventListener('input', ()=>{ currentLng = parseFloat(lngInput.value); gpsVal.textContent = 'แก้ไขด้วยตนเอง'; gpsReadout.classList.remove('empty'); validateForm(); });
